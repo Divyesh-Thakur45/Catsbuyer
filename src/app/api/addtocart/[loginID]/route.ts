@@ -1,18 +1,16 @@
 import connectDB from "@/lib/db";
 import addtocartModel from "@/models/addcart.model";
 import { NextRequest, NextResponse } from "next/server";
-
 // ✅ GET handler - Get cart data by loginID
 export async function GET(
   req: NextRequest,
-  { params }: { params: { loginID: string } }
+  context: { params: { loginID: string } }
 ) {
   try {
     await connectDB();
 
-    const { loginID } = params;
+    const { loginID } = context.params;
 
-    // ✅ Validate loginID
     if (!loginID || typeof loginID !== "string") {
       return NextResponse.json({
         status: 400,
@@ -50,12 +48,12 @@ export async function GET(
 // ✅ DELETE handler - Delete cart item by _id
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { loginID: string } }
+  context: { params: { loginID: string } }
 ) {
   try {
     await connectDB();
 
-    const { loginID } = params;
+    const { loginID } = context.params;
 
     if (!loginID || typeof loginID !== "string") {
       return NextResponse.json({
