@@ -17,10 +17,10 @@ export type CatResponse = {
 
 export interface cart {
   _id: string;
+  loginID: string;
   name: string;
   price: number;
   image: string;
-  loginID: string;
 }
 
 export interface cartResponse {

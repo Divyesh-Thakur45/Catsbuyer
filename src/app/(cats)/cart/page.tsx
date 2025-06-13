@@ -1,5 +1,8 @@
 "use client";
-import { Button } from "@/components/ui/button";
+
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Image from "next/image";
 import {
     Table,
     TableBody,
@@ -9,10 +12,8 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 import { cart, cartResponse } from "@/types/type";
-import axios from "axios";
-import Image from "next/image";
-import { useEffect, useState } from "react";
 
 export default function Addtocard() {
     const [data, setData] = useState<cart[]>([]);
@@ -20,7 +21,7 @@ export default function Addtocard() {
 
     const handleDelete = async (id: string) => {
         try {
-            await axios.delete(`http://localhost:3000/api/addtocart/${id}`);
+            await axios.delete(`/api/addtocart/${id}`);
             setData((prev) => prev.filter((item) => item._id !== id));
         } catch (error) {
             console.error("Delete failed:", error);
@@ -32,7 +33,7 @@ export default function Addtocard() {
         if (rawId) {
             const id = JSON.parse(rawId);
             axios
-                .get<cartResponse>(`http://localhost:3000/api/addtocart/${id}`)
+                .get<cartResponse>(`/api/addtocart/${id}`)
                 .then((res) => {
                     setData(res.data.cartData);
                     setisShow(res.data.success);
@@ -57,37 +58,33 @@ export default function Addtocard() {
                         <TableHead className="w-[200px]">Image</TableHead>
                         <TableHead>Name</TableHead>
                         <TableHead>Price</TableHead>
-                        <TableHead className="text-right">Functionality</TableHead>
+                        <TableHead className="text-right">Action</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {isShow && data.length > 0 ? (
-                        data.map((invoice: cart, idx: number) => (
-                            <TableRow key={idx}>
-                                <TableCell className="font-medium">
-                                    {invoice.image && (
-                                        <Image
-                                            src={invoice.image}
-                                            alt={invoice.name}
-                                            width={100}
-                                            height={100}
-                                            className="rounded-full object-cover"
-                                        />
-                                    )}
+                        data.map((item) => (
+                            <TableRow key={item._id}>
+                                <TableCell>
+                                    <Image
+                                        src={item.image}
+                                        alt={item.name}
+                                        width={80}
+                                        height={80}
+                                        className="rounded-full"
+                                    />
                                 </TableCell>
-                                <TableCell>{invoice.name}</TableCell>
-                                <TableCell>{invoice.price}</TableCell>
+                                <TableCell>{item.name}</TableCell>
+                                <TableCell>{item.price}</TableCell>
                                 <TableCell className="text-right">
-                                    <Button onClick={() => handleDelete(invoice._id)}>
-                                        Delete
-                                    </Button>
+                                    <Button onClick={() => handleDelete(item._id)}>Delete</Button>
                                 </TableCell>
                             </TableRow>
                         ))
                     ) : (
                         <TableRow>
                             <TableCell colSpan={4}>
-                                <h1 className="text-center">You do not have data</h1>
+                                <h1 className="text-center">No cart data found.</h1>
                             </TableCell>
                         </TableRow>
                     )}

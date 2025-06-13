@@ -1,17 +1,21 @@
 import connectDB from "@/lib/db";
 import addtocartModel from "@/models/addcart.model";
 import { NextRequest, NextResponse } from "next/server";
-// ✅ GET handler - Get cart data by loginID
-export async function GET(
-  req: NextRequest,
-  context: { params: { loginID: string } }
-) {
+
+type Context = {
+  params: {
+    loginID: string;
+  };
+};
+
+// ✅ GET: Cart data fetch by loginID
+export async function GET(req: NextRequest, context: Context) {
   try {
     await connectDB();
 
     const { loginID } = context.params;
 
-    if (!loginID || typeof loginID !== "string") {
+    if (!loginID) {
       return NextResponse.json({
         status: 400,
         message: "Invalid login ID",
@@ -36,7 +40,7 @@ export async function GET(
       success: true,
     });
   } catch (error) {
-    console.error("Error in GET handler:", error);
+    console.error("GET error:", error);
     return NextResponse.json({
       status: 500,
       message: "Server error",
@@ -45,25 +49,15 @@ export async function GET(
   }
 }
 
-// ✅ DELETE handler - Delete cart item by _id
-export async function DELETE(
-  req: NextRequest,
-  context: { params: { loginID: string } }
-) {
+// ✅ DELETE: Delete cart item by _id
+export async function DELETE(req: NextRequest, context: Context) {
   try {
     await connectDB();
 
     const { loginID } = context.params;
 
-    if (!loginID || typeof loginID !== "string") {
-      return NextResponse.json({
-        status: 400,
-        message: "Invalid ID",
-        success: false,
-      });
-    }
-
     const item = await addtocartModel.findOne({ _id: loginID });
+
     if (!item) {
       return NextResponse.json({
         status: 404,
@@ -73,6 +67,7 @@ export async function DELETE(
     }
 
     const deleteData = await addtocartModel.findByIdAndDelete(loginID);
+
     return NextResponse.json({
       status: 200,
       message: "Deleted successfully",
@@ -80,7 +75,7 @@ export async function DELETE(
       success: true,
     });
   } catch (error) {
-    console.error("Error in DELETE handler:", error);
+    console.error("DELETE error:", error);
     return NextResponse.json({
       status: 500,
       message: "Server error",
