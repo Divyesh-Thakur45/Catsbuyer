@@ -1,0 +1,74 @@
+[
+    {
+        "images": [
+            "/default/images/a1.jpeg",
+            "/default/images/a2.jpeg",
+            "/default/images/a3.jpeg"
+        ],
+        "name": "cat-1",
+        "price": "10,000"
+    },
+    {
+        "images": [
+            "/default/images/b1.jpeg",
+            "/default/images/b2.jpeg",
+            "/default/images/b3.jpeg"
+        ],
+        "name": "cat-2",
+        "price": "20,000"
+    },
+    {
+        "images": [
+            "/default/images/c1.jpeg",
+            "/default/images/c2.jpeg",
+            "/default/images/c3.jpeg"
+        ],
+        "name": "cat-3",
+        "price": "30,000"
+    },
+    {
+        "images": [
+            "/default/images/d1.jpeg",
+            "/default/images/d2.jpeg",
+            "/default/images/d3.jpeg"
+        ],
+        "name": "cat-4",
+        "price": "40,000"
+    },
+    {
+        "images": [
+            "/default/images/e1.jpeg",
+            "/default/images/e2.jpeg",
+            "/default/images/e3.jpeg"
+        ],
+        "name": "cat-5",
+        "price": "50,000"
+    },
+    {
+        "images": [
+            "/default/images/f1.jpeg",
+            "/default/images/f2.jpeg",
+            "/default/images/f3.jpeg"
+        ],
+        "name": "cat-6",
+        "price": "60,000"
+    },
+    {
+        "images": [
+            "/default/images/g1.jpeg",
+            "/default/images/g2.jpeg",
+            "/default/images/g3.jpeg"
+        ],
+        "name": "cat-7",
+        "price": "70,000"
+    },
+    {
+        "images": [
+            "/default/images/h1.jpeg",
+            "/default/images/h2.jpeg",
+            "/default/images/h3.jpeg"
+        ],
+        "name": "cat-8",
+        "price": "80,000"
+    }
+]
