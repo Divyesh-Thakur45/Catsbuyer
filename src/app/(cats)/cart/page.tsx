@@ -1,8 +1,5 @@
 "use client";
-
-import { useEffect, useState } from "react";
-import axios from "axios";
-import Image from "next/image";
+import { Button } from "@/components/ui/button";
 import {
     Table,
     TableBody,
@@ -12,8 +9,10 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { cart, cartResponse } from "@/types/type";
+import axios from "axios";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export default function Addtocard() {
     const [data, setData] = useState<cart[]>([]);
@@ -21,7 +20,7 @@ export default function Addtocard() {
 
     const handleDelete = async (id: string) => {
         try {
-            await axios.delete(`/api/addtocart/${id}`);
+            await axios.delete(`http://localhost:3000/api/addtocart/${id}`);
             setData((prev) => prev.filter((item) => item._id !== id));
         } catch (error) {
             console.error("Delete failed:", error);
@@ -31,9 +30,10 @@ export default function Addtocard() {
     useEffect(() => {
         const rawId = localStorage.getItem("id");
         if (rawId) {
-            const id = JSON.parse(rawId);
+            const id: string = JSON.parse(rawId);
             axios
-                .get<cartResponse>(`/api/addtocart/${id}`)
+                .get<cartResponse>(`http://localhost:3000/api/addtocart/${id}`)
+
                 .then((res) => {
                     setData(res.data.cartData);
                     setisShow(res.data.success);
@@ -58,36 +58,44 @@ export default function Addtocard() {
                         <TableHead className="w-[200px]">Image</TableHead>
                         <TableHead>Name</TableHead>
                         <TableHead>Price</TableHead>
-                        <TableHead className="text-right">Action</TableHead>
+                        <TableHead className="text-right">Functionality</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {isShow && data.length > 0 ? (
-                        data.map((item) => (
-                            <TableRow key={item._id}>
-                                <TableCell>
-                                    <Image
-                                        src={item.image}
-                                        alt={item.name}
-                                        width={80}
-                                        height={80}
-                                        className="rounded-full"
-                                    />
+                        data.map((invoice: cart, idx: number) => (
+                            <TableRow key={idx}>
+                                <TableCell className="font-medium">
+                                    {invoice.image && (
+                                        <div className="w-[100px] h-[100px] relative">
+                                            <Image
+                                                src={invoice.image}
+                                                alt={invoice.name}
+                                                fill
+                                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                priority
+                                                className="rounded-full object-contain"
+                                            />
+                                        </div>
+                                    )}
                                 </TableCell>
-                                <TableCell>{item.name}</TableCell>
-                                <TableCell>{item.price}</TableCell>
+                                <TableCell>{invoice.name}</TableCell>
+                                <TableCell>{invoice.price}</TableCell>
                                 <TableCell className="text-right">
-                                    <Button onClick={() => handleDelete(item._id)}>Delete</Button>
+                                    <Button onClick={() => handleDelete(invoice._id)}>
+                                        Delete
+                                    </Button>
                                 </TableCell>
                             </TableRow>
                         ))
                     ) : (
                         <TableRow>
                             <TableCell colSpan={4}>
-                                <h1 className="text-center">No cart data found.</h1>
+                                <h1 className="text-center">You do not have data</h1>
                             </TableCell>
                         </TableRow>
                     )}
+
                 </TableBody>
             </Table>
         </div>

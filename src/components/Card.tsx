@@ -23,7 +23,6 @@ export default function Card({ obj }: CardProps) {
             if (res.data.success) {
                 const addData = await axios.post(`http://localhost:3000/api/addtocart`, obj)
                 alert(addData.data.message)
-                console.log(addData.data)
             }
         } catch (error) {
             console.log("Error in add to cart :", error)
@@ -35,13 +34,13 @@ export default function Card({ obj }: CardProps) {
             <div
                 className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow p-4"
             >
-                <div className="flex justify-center">
+                <div className="relative h-[200px] w-[200px] bg-gray-100 rounded-2xl m-auto">
                     <Image
                         src={obj.images[index]}
                         alt={obj.name}
-                        width={200}
-                        height={200}
-                        className="rounded-xl object-cover"
+                        fill
+                        className="object-contain rounded-2xl"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                 </div>
 

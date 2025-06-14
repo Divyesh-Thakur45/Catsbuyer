@@ -6,10 +6,12 @@ import { Label } from "@/components/ui/label";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod/v4";
 
 export default function Login() {
+    const router = useRouter();
     const schema = z.object({
         email: z.string()
             .nonempty("Email is required")
@@ -29,17 +31,18 @@ export default function Login() {
         resolver: zodResolver(schema),
     });
     async function clickLogin(data: schemaType) {
-        axios.post("http://localhost:3000/api/users/login", data).then((res) => {
+        try {
+            const res = await axios.post("/api/users/login", data);
             if (res.data.success) {
-                localStorage.setItem("id", JSON.stringify(res.data.userID))
-                localStorage.setItem("toggle", JSON.stringify(res.data.success))
-
+                localStorage.setItem("id", JSON.stringify(res.data.userID));
+                localStorage.setItem("toggle", JSON.stringify(res.data.success));
+                router.push("/");
             }
-            alert(res.data.message)
-            window.location.href = "/"
-        })
-            .catch((err) => console.log(err))
-        reset()
+            alert(res.data.message);
+        } catch (err) {
+            console.log("Login Error:", err);
+        }
+        reset();
     }
     return (
         <div>
@@ -90,9 +93,11 @@ export default function Login() {
                             <Button type="submit" className="w-full hover:cursor-pointer">
                                 Login
                             </Button>
-                            <Button variant="outline" className="w-full">
-                                <Link href={"/signup"}>signup</Link>
-                            </Button>
+                            <Link href={"/signup"}>
+                                <Button variant="outline" className="w-full">
+                                    signup
+                                </Button>
+                            </Link>
                         </CardFooter>
                     </Card>
                 </form>
